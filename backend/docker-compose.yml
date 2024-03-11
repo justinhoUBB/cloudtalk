@@ -1,0 +1,35 @@
+version: '3'
+services:
+  product-service:
+    build: ./products
+    ports:
+      - '3000:3000'
+    depends_on:
+      - mongo
+      - rabbitmq
+      - redis
+  review-service:
+    build: ./reviews
+    ports:
+      - '3001:3001'
+    depends_on:
+      - mongo
+      - rabbitmq
+      - redis
+  mongo:
+    image: mongo
+    expose:
+      - 27017
+    ports:
+      - '27017:27017'
+    restart: always
+    entrypoint: ["/usr/bin/mongod", "--bind_ip_all"]
+  rabbitmq:
+    image: 'rabbitmq:3.13-management'
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+  redis:
+    image: 'redis:latest'
+    ports:
+      - '6379:6379'

@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+      "esModuleInterop": true,
+      "experimentalDecorators": true,
+      "module": "ESNext",
+      "moduleResolution": "Node",
+      "target": "ESNext",
+      "sourceMap": true,
+      "resolveJsonModule": true,
+      "outDir": "dist"
+  },
+  "include": ["src/**/*"],
+}
