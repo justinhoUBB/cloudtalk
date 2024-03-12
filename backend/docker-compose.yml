@@ -1,4 +1,4 @@
-version: '3'
+version: '1'
 services:
   product-service:
     build: ./products
@@ -10,18 +10,17 @@ services:
       - redis
   review-service:
     build: ./reviews
-    ports:
-      - '3001:3001'
     depends_on:
       - mongo
       - rabbitmq
       - redis
+      - product-service
   mongo:
     image: mongo
     expose:
       - 27017
     ports:
-      - '27017:27017'
+      - 27017:27017
     restart: always
     entrypoint: ["/usr/bin/mongod", "--bind_ip_all"]
   rabbitmq:
