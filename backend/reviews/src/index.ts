@@ -7,7 +7,7 @@ const productController = new ProductController();
 amqp.connect('amqp://rabbitmq', (error: any, connection: amqp.Connection) => {
     if (error) {
         console.log(error);
-        return;
+        throw error;
     }
     connection.createChannel((error: any, channel: amqp.Channel) => {
         if (error) {

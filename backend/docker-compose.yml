@@ -1,4 +1,4 @@
-version: '1'
+version: '3'
 services:
   product-service:
     build: ./products
@@ -10,11 +10,11 @@ services:
       - redis
   review-service:
     build: ./reviews
+    restart: unless-stopped
     depends_on:
       - mongo
       - rabbitmq
       - redis
-      - product-service
   mongo:
     image: mongo
     expose:
