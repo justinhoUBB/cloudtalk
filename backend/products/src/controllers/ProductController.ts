@@ -4,41 +4,41 @@ import { ProductService } from "../services/ProductService.js";
 
 export class ProductController {
     
-    async createProduct(req, res) {
-        const product = new Product(req.body);
+    async createProduct(request, response) {
+        const product = new Product(request.body);
         try {
-            await validate(product, res);
+            await validate(product, response);
         } catch (e) {
             return;
         }
         const productId = await ProductService.getInstance().createProduct(product);
-        res.json({ id: productId, message: "New product created successfully"})
+        response.json({ id: productId, message: "New product created successfully"})
     }
 
-    async getProductById(req, res) {
-        const product = await ProductService.getInstance().getProductById(req.params.id);
-        res.json(new Product(product).getProductData());
+    async getProductById(request, response) {
+        const product = await ProductService.getInstance().getProductById(request.params.id);
+        response.json(new Product(product).getProductData());
     }
 
-    async updateProduct(req, res) {
-        const product = new Product(req.body);
+    async updateProduct(request, response) {
+        const product = new Product(request.body);
         try {
-            await validate(product, res);
+            await validate(product, response);
         } catch (e) {
             return;
         }        
-        const updatedCount = await ProductService.getInstance().updateProduct(req.params.id, new Product(product));
-        res.json({ updatedCount })
+        const updatedCount = await ProductService.getInstance().updateProduct(request.params.id, new Product(product));
+        response.json({ updatedCount })
     }
 
-    async deleteProduct(req, res) {
-        const deletedCount = await ProductService.getInstance().deleteProduct(req.params.id);
-        res.json({ deletedCount });
+    async deleteProduct(request, response) {
+        const deletedCount = await ProductService.getInstance().deleteProduct(request.params.id);
+        response.json({ deletedCount });
     }
 
-    async listAllProducts(req, res) {
+    async listAllProducts(request, response) {
         const products = await ProductService.getInstance().listAllProducts();
         const publicProductsData = products.map(product => new Product(product).getProductData());
-        res.json(publicProductsData);
+        response.json(publicProductsData);
     }
 }

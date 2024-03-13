@@ -8,6 +8,7 @@ export interface IProduct {
     listOfReviews?: string[];
     ratingSum?: number;
     ratingCount?: number;
+    averageRating?: number;
 }
 
 export class Product {
@@ -22,10 +23,10 @@ export class Product {
         this.averageRating = product.ratingSum ? product.ratingSum / product.ratingCount : undefined;
     }
 
-    getProductData() {
+    getProductData(): IProduct {
         console.log(`Rating sum ${this.ratingSum}, rating count ${this.ratingCount}`);
         return {
-            id: this.id,
+            _id: this.id,
             name: this.name,
             description: this.description,
             price: this.price,

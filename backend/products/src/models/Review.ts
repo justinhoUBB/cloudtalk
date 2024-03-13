@@ -1,4 +1,4 @@
-import { IsOptional, IsString, Min, Max, IsInt } from "class-validator";
+import { IsString, Min, Max, IsInt } from "class-validator";
 
 export interface IReview {
     rating: number;
@@ -33,6 +33,5 @@ export class Review {
     text: string;
 
     @IsString()
-    @IsOptional()
     productId: string;
 }

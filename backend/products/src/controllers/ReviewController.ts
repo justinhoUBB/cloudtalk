@@ -7,20 +7,20 @@ import { sendToRabbitMQ } from "../helpers/RabbitHelper.js";
 
 export class ReviewController {
 
-    async createReview(req, res) {
-        const review = new Review(req.body);
+    async createReview(request, response) {
+        const review = new Review(request.body);
         try {
-            await validate(review, res);
+            await validate(review, response);
         } catch(e) {
             return;
         }
         const reviewId = await ReviewService.getInstance().createReview(review);
         sendToRabbitMQ('reviewExchange', JSON.stringify({ status: ReviewStatus.CREATED, review }));
-        res.json({ id: reviewId, message: "Review created successfully" });
+        response.json({ id: reviewId, message: "Review created successfully" });
     }
 
-    async getReviewsByProductId(req, res) {
-        const { productId } = req.params;
+    async getReviewsByProductId(request, response) {
+        const { productId } = request.params;
         const cacheKey = `reviews:${productId}`;
         const redisClient = new Redis({
             host: "redis",
@@ -28,34 +28,34 @@ export class ReviewController {
         });
         const cachedReviews = await redisClient.get(cacheKey);
         if (cachedReviews) {
-            res.json({ reviews: JSON.parse(cachedReviews), retrievedFrom: "Redis Cache" });
+            response.json({ reviews: JSON.parse(cachedReviews), retrievedFrom: "Redis Cache" });
         }
         else {
             const reviews = await ReviewService.getInstance().listAllReviewsForProductId(productId);
             await redisClient.set(cacheKey, JSON.stringify(reviews), "EX", 100);
-            res.json({ reviews, retrievedFrom: "MongoDB" });
+            response.json({ reviews, retrievedFrom: "MongoDB" });
         }
     }
 
-    async updateReview(req, res) {
-        const review = new Review(req.body);
+    async updateReview(request, response) {
+        const review = new Review(request.body);
         try {
-            await validate(review, res);
+            await validate(review, response);
         } catch(e) {
             return;
         }
-        const { oldRating, modifiedCount } = await ReviewService.getInstance().updateReview(req.params.id, review);
+        const { oldRating, modifiedCount } = await ReviewService.getInstance().updateReview(request.params.id, review);
         if (modifiedCount) {
             sendToRabbitMQ('reviewExchange', JSON.stringify({ status: ReviewStatus.UPDATED, review: { ...review, oldRating } }));
         }
-        res.json({ modifiedCount });
+        response.json({ modifiedCount });
     }
 
-    async deleteReview(req, res) {
-        const { deletedCount, review } = await ReviewService.getInstance().deleteReview(req.params.id);
+    async deleteReview(request, response) {
+        const { deletedCount, review } = await ReviewService.getInstance().deleteReview(request.params.id);
         if (deletedCount) {
             sendToRabbitMQ('reviewExchange', JSON.stringify({ status: ReviewStatus.DELETED,  review }));
         }
-        res.json({ deletedCount });
+        response.json({ deletedCount });
     }
 }
