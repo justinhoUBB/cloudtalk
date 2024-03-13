@@ -11,7 +11,7 @@ export interface IProduct {
     averageRating?: number;
 }
 
-export class Product {
+export class Product implements IProduct {
     constructor(product: IProduct) {
         this.id = product._id;
         this.name = product.name;

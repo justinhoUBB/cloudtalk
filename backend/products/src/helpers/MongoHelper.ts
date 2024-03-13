@@ -1,6 +1,6 @@
 import mongodb from "mongodb";
 
-export let mongo = {
+export const mongo = {
     products: null,
     reviews: null,
 };

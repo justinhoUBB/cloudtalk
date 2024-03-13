@@ -9,7 +9,7 @@ export interface IReview {
     productId?: string;
 }
 
-export class Review {
+export class Review implements IReview {
     constructor(review: IReview) {
         this.rating = review.rating;
         this.firstName = review.firstName;

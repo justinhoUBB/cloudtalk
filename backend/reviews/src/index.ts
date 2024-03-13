@@ -4,19 +4,19 @@ import { ProductController } from './controllers/ProductController.js';
 
 const exchangeName = 'reviewExchange';
 const productController = new ProductController();
-amqp.connect('amqp://rabbitmq', (error: any, connection: amqp.Connection) => {
+amqp.connect('amqp://rabbitmq', (error: Error, connection: amqp.Connection) => {
     if (error) {
         console.log(error);
         throw error;
     }
-    connection.createChannel((error: any, channel: amqp.Channel) => {
+    connection.createChannel((error: Error, channel: amqp.Channel) => {
         if (error) {
             console.log(error);
             return;
         }
 
         channel.assertExchange(exchangeName, 'fanout', {durable: false});
-        channel.assertQueue('', {exclusive: true}, (error: any, q: amqp.Replies.AssertQueue) => {
+        channel.assertQueue('', {exclusive: true}, (error: Error, q: amqp.Replies.AssertQueue) => {
             if (error) {
                 console.log(error);
                 return;

@@ -6,7 +6,7 @@ const app = express();
 const reviewController = new ReviewController();
 const productController = new ProductController();
 
-app.listen(3000);;
+app.listen(3000);
 app.use(express.json());
 
 // Product Routes
