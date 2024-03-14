@@ -2,8 +2,8 @@
   "compilerOptions": {
       "esModuleInterop": true,
       "experimentalDecorators": true,
-      "module": "ESNext",
-      "moduleResolution": "Node",
+      "module": "node16",
+      "moduleResolution": "node16",
       "target": "ESNext",
       "sourceMap": true,
       "resolveJsonModule": true,
