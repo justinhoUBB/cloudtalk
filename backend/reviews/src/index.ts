@@ -3,6 +3,7 @@ import { ReviewStatus } from './models/enums/ReviewStatus.js';
 import { ProductController } from './controllers/ProductController.js';
 
 const exchangeName = 'reviewExchange';
+const queueName = 'reviewQueue';
 const productController = new ProductController();
 amqp.connect('amqp://rabbitmq', (error: Error, connection: amqp.Connection) => {
     if (error) {
@@ -16,15 +17,15 @@ amqp.connect('amqp://rabbitmq', (error: Error, connection: amqp.Connection) => {
         }
 
         channel.assertExchange(exchangeName, 'fanout', {durable: false});
-        channel.assertQueue('', {exclusive: true}, (error: Error, q: amqp.Replies.AssertQueue) => {
+        channel.assertQueue(queueName, {durable: false}, (error: Error, q: amqp.Replies.AssertQueue) => {
             if (error) {
                 console.log(error);
                 return;
             }
             console.log('Waiting for review messages for processing');
-            channel.bindQueue(q.queue, exchangeName, '');
+            channel.bindQueue(queueName, exchangeName, '');
 
-            channel.consume(q.queue, (message: amqp.ConsumeMessage | null) => {
+            channel.consume(queueName, (message: amqp.ConsumeMessage | null) => {
                 if (message!== null) {
                     const { status, review } = JSON.parse(message.content.toString());
                     console.log('Message received', status, review);
