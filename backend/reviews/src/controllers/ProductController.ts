@@ -13,15 +13,10 @@ export class ProductController {
     }
 
     async updateReview(review: IReview) {
-        if (review.rating === review.oldRating) {
-            return;
-        }
-        await this.productService.removeRating(review.productId, review.oldRating);
-        await this.productService.addRating(review.productId, review.rating);
+       await this.productService.updateRating(review.productId, review.oldRating, review.rating);
     }
 
     async deleteReview(review: IReview) {
         await this.productService.removeRating(review.productId, review.rating);
-        await this.productService.deleteReview(review.productId, review._id);
     }
 }

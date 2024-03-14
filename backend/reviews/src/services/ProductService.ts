@@ -19,10 +19,14 @@ export class ProductService {
         return result;
     }
 
-    async deleteReview(productId: string, reviewId: string) {
+    async updateRating(productId: string, oldRating: number, newRating: number) {
+        if (newRating === oldRating) {
+            return;
+        }
+        const ratingDifference = newRating - oldRating;
         const result = await mongo.products.updateOne(
             { _id: new ObjectId(productId) },
-            { $pull: { 'reviewList': new ObjectId(reviewId) }} 
+            { $inc: { 'ratingSum': ratingDifference }} 
         );
         return result;
     }

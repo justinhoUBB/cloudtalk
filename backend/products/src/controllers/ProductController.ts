@@ -12,7 +12,7 @@ export class ProductController {
             return;
         }
         const productId = await ProductService.getInstance().createProduct(product);
-        response.json({ id: productId, message: "New product created successfully"})
+        response.json({ id: productId, message: "New product created successfully" })
     }
 
     async getProductById(request, response) {
@@ -36,7 +36,7 @@ export class ProductController {
         response.json({ deletedCount });
     }
 
-    async listAllProducts(request, response) {
+    async listAllProducts(_request, response) {
         const products = await ProductService.getInstance().listAllProducts();
         const publicProductsData = products.map(product => new Product(product).getProductData());
         response.json(publicProductsData);

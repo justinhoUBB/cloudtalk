@@ -5,7 +5,7 @@ export const mongo = {
     reviews: null,
 };
 
-async function initMongo () {
+async function initMongo(): Promise<void> {
     const dbName = "shop";
     const client = new mongodb.MongoClient(`mongodb://mongo:27017/${dbName}`);
 
